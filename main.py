@@ -1,26 +1,20 @@
 import os
 
 from dotenv import load_dotenv
-from googleapiclient.discovery import build
+
+from youtube_client import YoutubeClient
 
 
 def main():
     load_dotenv()
 
-    api_service_name = "youtube"
-    api_version = "v3"
+    API_VERSION = os.getenv("API_VERSION")
+    API_KEY = os.getenv("YOUTUBE_DATA_API_KEY")
+    CHANNEL_ID = os.getenv("CHANNEL_ID")
 
-    api_key = os.getenv("YOUTUBE_DATA_API_KEY")
-
-    youtube = build(api_service_name, api_version, developerKey=api_key)
-
-    request = youtube.channels().list(
-        part="statistics",
-        id="UCbcqRrT5zquRLfrRqI90yFw"
-    )
-    response = request.execute()
-
-    print(response)
+    client = YoutubeClient(API_KEY, API_VERSION)
+    channel = client.get_channel_info(CHANNEL_ID)
+    videos = client.get_recent_videos_from_channel(channel.uploads_playlist_id)
 
 
 if __name__ == "__main__":
