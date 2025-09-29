@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
+from db import insert_channel, insert_video
 from youtube_client import YoutubeClient
 
 
@@ -15,6 +16,10 @@ def main():
     client = YoutubeClient(API_KEY, API_VERSION)
     channel = client.get_channel_info(CHANNEL_ID)
     videos = client.get_recent_videos_from_channel(channel.uploads_playlist_id)
+
+    insert_channel(channel)
+    for video in videos:
+        insert_video(video)
 
 
 if __name__ == "__main__":
