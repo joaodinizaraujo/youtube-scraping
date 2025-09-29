@@ -28,8 +28,16 @@ def insert_channel(c: Channel) -> None:
 
     cur.execute(
         """
-        INSERT INTO channel (picture_date, channel_id, name, views, subscribers, video)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO channel (
+            picture_date, 
+            channel_id, 
+            name, 
+            views, 
+            subscribers_count, 
+            video_count,
+            uploads_playlist_id
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """,
         (
             datetime.now(),
@@ -37,7 +45,8 @@ def insert_channel(c: Channel) -> None:
             c.name,
             c.views,
             c.subscribers_count,
-            c.video_count
+            c.video_count,
+            c.uploads_playlist_id
         )
     )
 
@@ -59,8 +68,8 @@ def insert_video(v: Video) -> None:
             title, 
             published_at, 
             views, 
-            like, 
-            comment
+            like_count, 
+            comment_count
         )
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """,
