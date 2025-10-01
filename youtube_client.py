@@ -21,6 +21,16 @@ class Channel:
         self.video_count = video_count
         self.uploads_playlist_id = uploads_playlist_id
 
+    def __dict__(self):
+        return {
+            "channel_id": self.channel_id,
+            "name": self.name,
+            "views": self.views,
+            "subscribers_count": self.subscribers_count,
+            "video_count": self.video_count,
+            "uploads_playlist_id": self.uploads_playlist_id
+        }
+
 
 class Video:
     def __init__(
@@ -40,6 +50,17 @@ class Video:
         self.published_at = published_at
         self.like_count = like_count
         self.comment_count = comment_count
+
+    def __dict__(self):
+        return {
+            "video_id": self.video_id,
+            "channel_id": self.channel_id,
+            "title": self.title,
+            "published_at": self.published_at.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
+            "views": self.views,
+            "like_count": self.like_count,
+            "comment_count": self.comment_count
+        }
 
 
 class YoutubeClient:
@@ -82,7 +103,7 @@ class YoutubeClient:
             published_at = None
             for i in response["items"]:
                 published_at = datetime.fromisoformat(
-                    i["snippet"]["publishedAt"].replace('Z', '+00:00')
+                    i["snippet"]["publishedAt"].replace("Z", "+00:00")
                 )
                 if published_at.replace(tzinfo=None) < published_after:
                     break
