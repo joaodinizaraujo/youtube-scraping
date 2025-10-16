@@ -23,12 +23,12 @@ class Channel:
 
     def __dict__(self):
         return {
-            "channel_id": self.channel_id,
-            "name": self.name,
+            "channel_id": self.channel_id.replace("|", ""),
+            "name": self.name.replace("|", ""),
             "views": self.views,
             "subscribers_count": self.subscribers_count,
             "video_count": self.video_count,
-            "uploads_playlist_id": self.uploads_playlist_id
+            "uploads_playlist_id": self.uploads_playlist_id.replace("|", "")
         }
 
 
@@ -39,17 +39,19 @@ class Video:
         channel_id: str,
         title: str,
         published_at: datetime,
+        thumb: str,
         views: Optional[int] = None,
         like_count: Optional[int] = None,
         comment_count: Optional[int] = None
     ):
-        self.video_id = video_id
-        self.channel_id = channel_id
-        self.title = title
+        self.video_id = video_id.replace("|", "")
+        self.channel_id = channel_id.replace("|", "")
+        self.title = title.replace("|", "")
         self.views = views
         self.published_at = published_at
         self.like_count = like_count
         self.comment_count = comment_count
+        self.thumb = thumb
 
     def __dict__(self):
         return {
@@ -59,7 +61,8 @@ class Video:
             "published_at": self.published_at.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
             "views": self.views,
             "like_count": self.like_count,
-            "comment_count": self.comment_count
+            "comment_count": self.comment_count,
+            "thumb": self.thumb.replace("|", "")
         }
 
 
@@ -112,7 +115,8 @@ class YoutubeClient:
                     video_id=i["snippet"]["resourceId"]["videoId"],
                     channel_id=i["snippet"]["channelId"],
                     title=i["snippet"]["title"],
-                    published_at=published_at
+                    published_at=published_at,
+                    thumb=i["snippet"]["thumbnails"]["high"]["url"]
                 ))
             else:
                 request = self.youtube.playlistItems().list_next(request, response)
